@@ -13,7 +13,25 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
       colors: {
+        glow: {
+          primary: "hsl(var(--glow-primary))",
+          accent: "hsl(var(--glow-accent))",
+        },
+        surface: {
+          elevated: "hsl(var(--surface-elevated))",
+        },
+        band: {
+          1: "hsl(var(--band-1))",
+          2: "hsl(var(--band-2))",
+          3: "hsl(var(--band-3))",
+          4: "hsl(var(--band-4))",
+          5: "hsl(var(--band-5))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
