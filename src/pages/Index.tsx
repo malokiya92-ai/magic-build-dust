@@ -7,6 +7,7 @@ import PresetSelector from '@/components/PresetSelector';
 import NoiseReductionPanel from '@/components/NoiseReductionPanel';
 import TransportBar from '@/components/TransportBar';
 import ComparisonView from '@/components/ComparisonView';
+import LevelMeters from '@/components/LevelMeters';
 import { Activity, Power } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -169,6 +170,9 @@ const Index = () => {
               <Power className="w-3.5 h-3.5" />
               {bypassed ? 'BYPASS (DRY)' : 'PROCESSING (WET)'}
             </Button>
+          </div>
+          <div className="mb-3">
+            <LevelMeters engine={engineRef.current} isActive={isActive && isPlaying} />
           </div>
           <ComparisonView engine={engineRef.current} isActive={isActive && isPlaying} />
         </div>
