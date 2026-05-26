@@ -6,7 +6,9 @@ import BandControl from '@/components/BandControl';
 import PresetSelector from '@/components/PresetSelector';
 import NoiseReductionPanel from '@/components/NoiseReductionPanel';
 import TransportBar from '@/components/TransportBar';
-import { Activity } from 'lucide-react';
+import ComparisonView from '@/components/ComparisonView';
+import { Activity, Power } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const engineRef = useRef<AudioEngine | null>(null);
