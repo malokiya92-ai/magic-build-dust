@@ -171,6 +171,9 @@ const Index = () => {
               {bypassed ? 'BYPASS (DRY)' : 'PROCESSING (WET)'}
             </Button>
           </div>
+          <div className="mb-3">
+            <LevelMeters engine={engineRef.current} isActive={isActive && isPlaying} />
+          </div>
           <ComparisonView engine={engineRef.current} isActive={isActive && isPlaying} />
         </div>
 
