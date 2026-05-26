@@ -104,11 +104,15 @@ export class AudioEngine {
   private source: AudioBufferSourceNode | MediaStreamAudioSourceNode | MediaElementAudioSourceNode | null = null;
   private filters: BiquadFilterNode[] = [];
   private analyser: AnalyserNode | null = null;
+  private inputAnalyser: AnalyserNode | null = null;
   private gainNode: GainNode | null = null;
+  private dryGain: GainNode | null = null;
+  private wetGain: GainNode | null = null;
   private highPassFilter: BiquadFilterNode | null = null;
   private lowPassFilter: BiquadFilterNode | null = null;
   private mediaElement: HTMLAudioElement | null = null;
   private isPlaying = false;
+  private bypassed = false;
 
   async init() {
     if (this.context) return;
@@ -116,7 +120,16 @@ export class AudioEngine {
     this.analyser = this.context.createAnalyser();
     this.analyser.fftSize = 2048;
     this.analyser.smoothingTimeConstant = 0.85;
+
+    this.inputAnalyser = this.context.createAnalyser();
+    this.inputAnalyser.fftSize = 2048;
+    this.inputAnalyser.smoothingTimeConstant = 0.85;
+
     this.gainNode = this.context.createGain();
+    this.dryGain = this.context.createGain();
+    this.wetGain = this.context.createGain();
+    this.dryGain.gain.value = 0;
+    this.wetGain.gain.value = 1;
 
     // Create noise reduction filters
     this.highPassFilter = this.context.createBiquadFilter();
@@ -139,7 +152,7 @@ export class AudioEngine {
   }
 
   private connectChain() {
-    if (!this.source || !this.context || !this.analyser || !this.gainNode || !this.highPassFilter || !this.lowPassFilter) return;
+    if (!this.source || !this.context || !this.analyser || !this.inputAnalyser || !this.gainNode || !this.dryGain || !this.wetGain || !this.highPassFilter || !this.lowPassFilter) return;
 
     // Disconnect everything
     try { this.source.disconnect(); } catch {}
@@ -147,8 +160,18 @@ export class AudioEngine {
     try { this.highPassFilter.disconnect(); } catch {}
     try { this.lowPassFilter.disconnect(); } catch {}
     try { this.gainNode.disconnect(); } catch {}
+    try { this.inputAnalyser.disconnect(); } catch {}
+    try { this.dryGain.disconnect(); } catch {}
+    try { this.wetGain.disconnect(); } catch {}
+    try { this.analyser.disconnect(); } catch {}
 
-    // Chain: source -> highpass -> filters -> lowpass -> gain -> analyser -> destination
+    // Tap source into input analyser (visualize dry signal)
+    this.source.connect(this.inputAnalyser);
+    // Dry path for A/B
+    this.source.connect(this.dryGain);
+    this.dryGain.connect(this.context.destination);
+
+    // Wet path: source -> highpass -> filters -> lowpass -> gain -> analyser -> wetGain -> destination
     let current: AudioNode = this.source;
     current.connect(this.highPassFilter);
     current = this.highPassFilter;
@@ -161,7 +184,33 @@ export class AudioEngine {
     current.connect(this.lowPassFilter);
     this.lowPassFilter.connect(this.gainNode);
     this.gainNode.connect(this.analyser);
-    this.analyser.connect(this.context.destination);
+    this.analyser.connect(this.wetGain);
+    this.wetGain.connect(this.context.destination);
+  }
+
+  setBypassed(bypassed: boolean) {
+    this.bypassed = bypassed;
+    if (this.dryGain && this.wetGain && this.context) {
+      const now = this.context.currentTime;
+      this.dryGain.gain.setTargetAtTime(bypassed ? 1 : 0, now, 0.01);
+      this.wetGain.gain.setTargetAtTime(bypassed ? 0 : 1, now, 0.01);
+    }
+  }
+
+  getBypassed() { return this.bypassed; }
+
+  getInputFrequencyData(): Uint8Array {
+    if (!this.inputAnalyser) return new Uint8Array(0);
+    const data = new Uint8Array(this.inputAnalyser.frequencyBinCount);
+    this.inputAnalyser.getByteFrequencyData(data);
+    return data;
+  }
+
+  getInputTimeDomainData(): Uint8Array {
+    if (!this.inputAnalyser) return new Uint8Array(0);
+    const data = new Uint8Array(this.inputAnalyser.frequencyBinCount);
+    this.inputAnalyser.getByteTimeDomainData(data);
+    return data;
   }
 
   async loadFile(file: File): Promise<number> {

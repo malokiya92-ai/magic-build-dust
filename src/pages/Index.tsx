@@ -6,7 +6,9 @@ import BandControl from '@/components/BandControl';
 import PresetSelector from '@/components/PresetSelector';
 import NoiseReductionPanel from '@/components/NoiseReductionPanel';
 import TransportBar from '@/components/TransportBar';
-import { Activity } from 'lucide-react';
+import ComparisonView from '@/components/ComparisonView';
+import { Activity, Power } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const engineRef = useRef<AudioEngine | null>(null);
@@ -17,6 +19,15 @@ const Index = () => {
   const [sourceType, setSourceType] = useState<'file' | 'mic' | null>(null);
   const [fileName, setFileName] = useState('');
   const [isActive, setIsActive] = useState(false);
+  const [bypassed, setBypassed] = useState(false);
+
+  const handleBypassToggle = useCallback(() => {
+    setBypassed(prev => {
+      const next = !prev;
+      engineRef.current?.setBypassed(next);
+      return next;
+    });
+  }, []);
 
   const getEngine = useCallback(async () => {
     if (!engineRef.current) {
@@ -139,7 +150,29 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Presets */}
+        {/* Input vs Output comparison */}
+        <div className="p-4 rounded-xl surface-elevated border border-border/50">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h2 className="font-mono text-xs text-muted-foreground tracking-wider">INPUT vs OUTPUT</h2>
+              <p className="text-[10px] text-muted-foreground/70 font-mono mt-0.5">
+                A/B compare the dry source against the processed signal — visually and audibly.
+              </p>
+            </div>
+            <Button
+              variant={bypassed ? 'outline' : 'default'}
+              size="sm"
+              onClick={handleBypassToggle}
+              disabled={!isActive}
+              className="font-mono text-xs tracking-wider gap-2"
+            >
+              <Power className="w-3.5 h-3.5" />
+              {bypassed ? 'BYPASS (DRY)' : 'PROCESSING (WET)'}
+            </Button>
+          </div>
+          <ComparisonView engine={engineRef.current} isActive={isActive && isPlaying} />
+        </div>
+
         <div>
           <h2 className="font-mono text-xs text-muted-foreground mb-3 tracking-wider">PRESETS</h2>
           <PresetSelector activePreset={activePreset} onSelect={handlePresetSelect} />
