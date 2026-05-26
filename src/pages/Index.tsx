@@ -19,6 +19,15 @@ const Index = () => {
   const [sourceType, setSourceType] = useState<'file' | 'mic' | null>(null);
   const [fileName, setFileName] = useState('');
   const [isActive, setIsActive] = useState(false);
+  const [bypassed, setBypassed] = useState(false);
+
+  const handleBypassToggle = useCallback(() => {
+    setBypassed(prev => {
+      const next = !prev;
+      engineRef.current?.setBypassed(next);
+      return next;
+    });
+  }, []);
 
   const getEngine = useCallback(async () => {
     if (!engineRef.current) {
