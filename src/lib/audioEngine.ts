@@ -117,6 +117,7 @@ export class AudioEngine {
   private bypassed = false;
   private noiseReduction: NoiseReduction = { ...DEFAULT_NOISE_REDUCTION };
   private gateRAF = 0;
+  private masterGainDb = 0;
 
   async init() {
     if (this.context) return;
