@@ -107,97 +107,101 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-6 lg:p-8">
-      <div className="max-w-6xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-primary/10">
-            <Activity className="w-6 h-6 text-primary" />
+    <div className="min-h-screen bg-background">
+      {/* Top bar */}
+      <header className="sticky top-0 z-20 border-b border-border/60 bg-background/80 backdrop-blur-xl">
+        <div className="flex items-center gap-3 px-4 md:px-6 h-16">
+          <div className="p-2 rounded-md bg-primary/15 border border-primary/30">
+            <Activity className="w-5 h-5 text-primary" />
           </div>
-          <div>
-            <h1 className="text-xl font-semibold text-foreground tracking-tight">
+          <div className="leading-tight">
+            <h1 className="font-mono text-lg font-bold tracking-tight text-foreground">
               SP<span className="text-primary text-glow">09</span>
             </h1>
-            <p className="text-xs text-muted-foreground font-mono tracking-wider">PARAMETRIC EQ &amp; NOISE PROFILER</p>
+            <p className="panel-label">Parametric EQ &amp; Noise Profiler</p>
           </div>
-        </div>
-
-        {/* Transport */}
-        <TransportBar
-          isPlaying={isPlaying}
-          hasSource={sourceType !== null}
-          sourceType={sourceType}
-          fileName={fileName}
-          onPlay={handlePlay}
-          onPause={handlePause}
-          onStop={handleStop}
-          onFileSelect={handleFileSelect}
-          onMicToggle={handleMicToggle}
-        />
-
-        {/* Visualizations */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl surface-elevated border border-border/50">
-            <h2 className="font-mono text-xs text-muted-foreground mb-3 tracking-wider">SPECTRUM</h2>
-            <div className="h-32">
-              <SpectrumAnalyzer engine={engineRef.current} isActive={isActive && isPlaying} />
-            </div>
-          </div>
-          <div className="p-4 rounded-xl surface-elevated border border-border/50">
-            <h2 className="font-mono text-xs text-muted-foreground mb-3 tracking-wider">EQ RESPONSE</h2>
-            <div className="h-32 md:h-48">
-              <EQCurveDisplay engine={engineRef.current} bands={bands} />
-            </div>
-          </div>
-        </div>
-
-        {/* Input vs Output comparison */}
-        <div className="p-4 rounded-xl surface-elevated border border-border/50">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <h2 className="font-mono text-xs text-muted-foreground tracking-wider">INPUT vs OUTPUT</h2>
-              <p className="text-[10px] text-muted-foreground/70 font-mono mt-0.5">
-                A/B compare the dry source against the processed signal — visually and audibly.
-              </p>
-            </div>
+          <div className="ml-auto flex items-center gap-3">
+            <span className={`flex items-center gap-2 panel-label ${isPlaying ? 'text-primary' : ''}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${isPlaying ? 'bg-primary animate-pulse' : 'bg-muted-foreground/50'}`} />
+              {isPlaying ? 'Live' : 'Idle'}
+            </span>
             <Button
               variant={bypassed ? 'outline' : 'default'}
               size="sm"
               onClick={handleBypassToggle}
               disabled={!isActive}
-              className="font-mono text-xs tracking-wider gap-2"
+              className="font-mono text-[11px] tracking-wider gap-2"
             >
               <Power className="w-3.5 h-3.5" />
-              {bypassed ? 'BYPASS (DRY)' : 'PROCESSING (WET)'}
+              {bypassed ? 'DRY' : 'WET'}
             </Button>
           </div>
-          <div className="mb-3">
-            <LevelMeters engine={engineRef.current} isActive={isActive && isPlaying} />
-          </div>
-          <ComparisonView engine={engineRef.current} isActive={isActive && isPlaying} />
         </div>
+      </header>
 
-        <div>
-          <h2 className="font-mono text-xs text-muted-foreground mb-3 tracking-wider">PRESETS</h2>
-          <PresetSelector activePreset={activePreset} onSelect={handlePresetSelect} />
-          <p className="text-xs text-muted-foreground mt-2 font-mono">{PRESETS[activePreset].description}</p>
-        </div>
+      <div className="flex flex-col lg:flex-row">
+        {/* Side rail */}
+        <aside className="lg:w-[300px] lg:shrink-0 lg:h-[calc(100vh-4rem)] lg:sticky lg:top-16 lg:overflow-y-auto border-b lg:border-b-0 lg:border-r border-border/60 p-4 space-y-5">
+          <TransportBar
+            isPlaying={isPlaying}
+            hasSource={sourceType !== null}
+            sourceType={sourceType}
+            fileName={fileName}
+            onPlay={handlePlay}
+            onPause={handlePause}
+            onStop={handleStop}
+            onFileSelect={handleFileSelect}
+            onMicToggle={handleMicToggle}
+          />
 
-        {/* Controls */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
-          {/* Band controls */}
           <div>
-            <h2 className="font-mono text-xs text-muted-foreground mb-3 tracking-wider">BANDS</h2>
-            <div className="flex gap-2 overflow-x-auto pb-2">
+            <h2 className="panel-label mb-3">Presets</h2>
+            <PresetSelector activePreset={activePreset} onSelect={handlePresetSelect} />
+            <p className="text-xs text-muted-foreground mt-3 leading-relaxed">{PRESETS[activePreset].description}</p>
+          </div>
+
+          <NoiseReductionPanel settings={noiseReduction} onChange={handleNoiseReductionChange} />
+        </aside>
+
+        {/* Main panels */}
+        <main className="flex-1 min-w-0 p-4 md:p-6 space-y-5">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+            <section className="p-4 rounded-lg surface-elevated border border-border/60">
+              <h2 className="panel-label mb-3">Spectrum</h2>
+              <div className="h-32">
+                <SpectrumAnalyzer engine={engineRef.current} isActive={isActive && isPlaying} />
+              </div>
+            </section>
+            <section className="p-4 rounded-lg surface-elevated border border-border/60">
+              <h2 className="panel-label mb-3">EQ Response</h2>
+              <div className="h-32">
+                <EQCurveDisplay engine={engineRef.current} bands={bands} />
+              </div>
+            </section>
+          </div>
+
+          <section className="p-4 rounded-lg surface-elevated border border-border/60">
+            <div className="mb-3">
+              <h2 className="panel-label">Input vs Output</h2>
+              <p className="text-[11px] text-muted-foreground/70 mt-1">
+                A/B compare the dry source against the processed signal — visually and audibly.
+              </p>
+            </div>
+            <div className="mb-3">
+              <LevelMeters engine={engineRef.current} isActive={isActive && isPlaying} />
+            </div>
+            <ComparisonView engine={engineRef.current} isActive={isActive && isPlaying} />
+          </section>
+
+          <section className="p-4 rounded-lg surface-elevated border border-border/60">
+            <h2 className="panel-label mb-3">Bands</h2>
+            <div className="flex gap-3 overflow-x-auto pb-2">
               {bands.map((band, i) => (
                 <BandControl key={i} band={band} index={i} onChange={handleBandChange} />
               ))}
             </div>
-          </div>
-
-          {/* Noise reduction */}
-          <NoiseReductionPanel settings={noiseReduction} onChange={handleNoiseReductionChange} />
-        </div>
+          </section>
+        </main>
       </div>
     </div>
   );

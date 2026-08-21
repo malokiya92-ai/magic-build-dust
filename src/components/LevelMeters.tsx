@@ -93,7 +93,7 @@ const LevelMeters = ({ engine, isActive }: Props) => {
       </div>
       <div className="flex gap-4">
         <Meter label="INPUT" db={inDb} peak={peakInState} color="hsl(220, 15%, 70%)" />
-        <Meter label="OUTPUT" db={outDb} peak={peakOutState} color="hsl(175, 80%, 55%)" />
+        <Meter label="OUTPUT" db={outDb} peak={peakOutState} color="hsl(243, 80%, 68%)" />
       </div>
     </div>
   );

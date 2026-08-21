@@ -41,7 +41,7 @@ const SpectrumAnalyzer = ({ engine, isActive }: Props) => {
       const value = data[dataIndex] / 255;
       const barH = value * h * 0.85;
 
-      const hue = 175 + (i / barCount) * 30;
+      const hue = 232 + (i / barCount) * 40;
       const gradient = ctx.createLinearGradient(0, h, 0, h - barH);
       gradient.addColorStop(0, `hsla(${hue}, 80%, 50%, 0.8)`);
       gradient.addColorStop(0.5, `hsla(${hue}, 80%, 50%, 0.4)`);
