@@ -8,9 +8,9 @@ interface Props {
 
 const BAND_COLORS = [
   'hsl(0, 75%, 60%)',
-  'hsl(30, 85%, 55%)',
+  'hsl(280, 80%, 65%)',
   'hsl(55, 80%, 50%)',
-  'hsl(175, 80%, 50%)',
+  'hsl(243, 75%, 62%)',
   'hsl(260, 70%, 65%)',
 ];
 
@@ -83,7 +83,7 @@ const EQCurveDisplay = ({ engine, bands }: Props) => {
       
       // Combined curve
       ctx.beginPath();
-      ctx.strokeStyle = 'hsl(175, 80%, 50%)';
+      ctx.strokeStyle = 'hsl(243, 75%, 62%)';
       ctx.lineWidth = 2;
       
       for (let i = 0; i < resp.frequencies.length; i++) {
@@ -99,7 +99,7 @@ const EQCurveDisplay = ({ engine, bands }: Props) => {
       ctx.lineTo(lastX, midY);
       ctx.lineTo(freqToX(resp.frequencies[0], w), midY);
       ctx.closePath();
-      ctx.fillStyle = 'hsla(175, 80%, 50%, 0.08)';
+      ctx.fillStyle = 'hsla(243, 75%, 62%, 0.08)';
       ctx.fill();
     }
 

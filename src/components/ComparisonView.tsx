@@ -75,7 +75,7 @@ const ComparisonView = ({ engine, isActive }: Props) => {
       ctx.lineTo(w, h / 2);
       ctx.lineTo(0, h / 2);
       ctx.closePath();
-      ctx.fillStyle = 'hsla(30, 85%, 55%, 0.18)';
+      ctx.fillStyle = 'hsla(280, 80%, 65%, 0.18)';
       ctx.fill();
 
       // Input spectrum (dry) — muted line
@@ -98,9 +98,9 @@ const ComparisonView = ({ engine, isActive }: Props) => {
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = 'hsl(175, 80%, 55%)';
+      ctx.strokeStyle = 'hsl(243, 80%, 68%)';
       ctx.lineWidth = 2;
-      ctx.shadowColor = 'hsla(175, 80%, 55%, 0.5)';
+      ctx.shadowColor = 'hsla(243, 80%, 68%, 0.5)';
       ctx.shadowBlur = 6;
       ctx.stroke();
       ctx.shadowBlur = 0;
@@ -140,7 +140,7 @@ const ComparisonView = ({ engine, isActive }: Props) => {
       };
 
       drawWave(inData, 'hsla(220, 15%, 65%, 0.7)', 1.2);
-      drawWave(outData, 'hsl(30, 85%, 60%)', 1.5, 4);
+      drawWave(outData, 'hsl(280, 85%, 70%)', 1.5, 4);
     }
 
     animRef.current = requestAnimationFrame(draw);
@@ -159,11 +159,11 @@ const ComparisonView = ({ engine, isActive }: Props) => {
           <span className="text-muted-foreground">INPUT (DRY)</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-3 h-0.5" style={{ background: 'hsl(175, 80%, 55%)' }} />
+          <span className="w-3 h-0.5" style={{ background: 'hsl(243, 80%, 68%)' }} />
           <span className="text-muted-foreground">OUTPUT (WET)</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-3 h-2 rounded-sm" style={{ background: 'hsla(30, 85%, 55%, 0.4)' }} />
+          <span className="w-3 h-2 rounded-sm" style={{ background: 'hsla(280, 80%, 65%, 0.4)' }} />
           <span className="text-muted-foreground">Δ DIFF</span>
         </div>
       </div>
