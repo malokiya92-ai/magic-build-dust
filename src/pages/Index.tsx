@@ -115,8 +115,8 @@ const Index = () => {
             <Activity className="w-5 h-5 text-primary" />
           </div>
           <div className="leading-tight">
-            <h1 className="font-mono text-lg font-bold tracking-tight text-foreground">
-              SP<span className="text-primary text-glow">09</span>
+            <h1 className="brand-wordmark text-xl md:text-2xl">
+              Sp&middot;09
             </h1>
             <p className="panel-label">Parametric EQ &amp; Noise Profiler</p>
           </div>
