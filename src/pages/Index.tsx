@@ -161,6 +161,8 @@ const Index = () => {
           </div>
 
           <NoiseReductionPanel settings={noiseReduction} onChange={handleNoiseReductionChange} />
+
+          <MasterOutputPanel gainDb={masterGain} onChange={handleMasterGainChange} />
         </aside>
 
         {/* Main panels */}
