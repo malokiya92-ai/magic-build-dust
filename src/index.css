@@ -112,4 +112,16 @@
     text-transform: uppercase;
     color: hsl(var(--muted-foreground));
   }
+
+  .brand-wordmark {
+    font-family: 'Chakra Petch', 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 18px hsl(var(--primary) / 0.45));
+  }
 }
