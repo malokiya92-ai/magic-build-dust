@@ -8,6 +8,7 @@ import NoiseReductionPanel from '@/components/NoiseReductionPanel';
 import TransportBar from '@/components/TransportBar';
 import ComparisonView from '@/components/ComparisonView';
 import LevelMeters from '@/components/LevelMeters';
+import MasterOutputPanel from '@/components/MasterOutputPanel';
 import { Activity, Power } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
