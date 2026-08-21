@@ -22,6 +22,12 @@ const Index = () => {
   const [fileName, setFileName] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [bypassed, setBypassed] = useState(false);
+  const [masterGain, setMasterGain] = useState(0);
+
+  const handleMasterGainChange = useCallback((db: number) => {
+    setMasterGain(db);
+    engineRef.current?.setMasterGain(db);
+  }, []);
 
   const handleBypassToggle = useCallback(() => {
     setBypassed(prev => {
