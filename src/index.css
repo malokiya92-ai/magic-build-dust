@@ -2,60 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 220 20% 7%;
-    --foreground: 210 20% 90%;
+    --background: 240 60% 6%;
+    --foreground: 230 30% 92%;
 
-    --card: 220 18% 10%;
-    --card-foreground: 210 20% 90%;
+    --card: 236 52% 11%;
+    --card-foreground: 230 30% 92%;
 
-    --popover: 220 18% 10%;
-    --popover-foreground: 210 20% 90%;
+    --popover: 236 52% 11%;
+    --popover-foreground: 230 30% 92%;
 
-    --primary: 175 80% 50%;
-    --primary-foreground: 220 20% 7%;
+    --primary: 243 75% 62%;
+    --primary-foreground: 240 60% 6%;
 
-    --secondary: 220 15% 16%;
-    --secondary-foreground: 210 20% 85%;
+    --secondary: 240 40% 17%;
+    --secondary-foreground: 230 30% 88%;
 
-    --muted: 220 15% 14%;
-    --muted-foreground: 215 15% 50%;
+    --muted: 240 38% 14%;
+    --muted-foreground: 232 20% 60%;
 
-    --accent: 145 70% 50%;
-    --accent-foreground: 220 20% 7%;
+    --accent: 265 80% 68%;
+    --accent-foreground: 240 60% 6%;
 
-    --destructive: 0 70% 55%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 350 80% 60%;
+    --destructive-foreground: 230 40% 98%;
 
-    --border: 220 15% 18%;
-    --input: 220 15% 18%;
-    --ring: 175 80% 50%;
+    --border: 240 35% 20%;
+    --input: 240 35% 20%;
+    --ring: 243 75% 62%;
 
-    --radius: 0.75rem;
+    --radius: 0.375rem;
 
-    --sidebar-background: 220 18% 8%;
-    --sidebar-foreground: 210 20% 85%;
-    --sidebar-primary: 175 80% 50%;
-    --sidebar-primary-foreground: 220 20% 7%;
-    --sidebar-accent: 220 15% 14%;
-    --sidebar-accent-foreground: 210 20% 85%;
-    --sidebar-border: 220 15% 18%;
-    --sidebar-ring: 175 80% 50%;
+    --sidebar-background: 240 55% 8%;
+    --sidebar-foreground: 230 30% 88%;
+    --sidebar-primary: 243 75% 62%;
+    --sidebar-primary-foreground: 240 60% 6%;
+    --sidebar-accent: 240 38% 14%;
+    --sidebar-accent-foreground: 230 30% 88%;
+    --sidebar-border: 240 35% 20%;
+    --sidebar-ring: 243 75% 62%;
 
     /* Custom tokens */
-    --glow-primary: 175 80% 50%;
-    --glow-accent: 145 70% 50%;
-    --surface-elevated: 220 16% 13%;
-    --band-1: 0 75% 60%;
-    --band-2: 30 85% 55%;
-    --band-3: 55 80% 50%;
-    --band-4: 175 80% 50%;
-    --band-5: 260 70% 65%;
+    --glow-primary: 243 80% 66%;
+    --glow-accent: 265 80% 68%;
+    --surface-elevated: 238 45% 12%;
+    --band-1: 350 80% 65%;
+    --band-2: 20 85% 62%;
+    --band-3: 190 80% 58%;
+    --band-4: 243 80% 66%;
+    --band-5: 285 75% 70%;
 
-    font-family: 'Inter', sans-serif;
+    --gradient-primary: linear-gradient(135deg, hsl(243 75% 62%), hsl(285 75% 66%));
+
+    font-family: 'Work Sans', sans-serif;
   }
 }
 
@@ -66,7 +68,16 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Work Sans', sans-serif;
+    background-image:
+      radial-gradient(900px 500px at 15% -10%, hsl(243 75% 62% / 0.16), transparent 65%),
+      radial-gradient(700px 400px at 100% 0%, hsl(285 75% 66% / 0.10), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3 {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -76,8 +87,8 @@
   }
 
   .glow-primary {
-    box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.3),
-                0 0 60px hsl(var(--glow-primary) / 0.1);
+    box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.35),
+                0 0 60px hsl(var(--glow-primary) / 0.12);
   }
 
   .glow-accent {
@@ -86,10 +97,19 @@
   }
 
   .surface-elevated {
-    background-color: hsl(var(--surface-elevated));
+    background-color: hsl(var(--surface-elevated) / 0.75);
+    backdrop-filter: blur(10px);
   }
 
   .text-glow {
-    text-shadow: 0 0 10px hsl(var(--primary) / 0.5);
+    text-shadow: 0 0 14px hsl(var(--primary) / 0.6);
+  }
+
+  .panel-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
   }
 }
