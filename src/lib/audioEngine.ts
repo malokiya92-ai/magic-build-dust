@@ -117,6 +117,7 @@ export class AudioEngine {
   private bypassed = false;
   private noiseReduction: NoiseReduction = { ...DEFAULT_NOISE_REDUCTION };
   private gateRAF = 0;
+  private masterGainDb = 0;
 
   async init() {
     if (this.context) return;
@@ -248,6 +249,17 @@ export class AudioEngine {
   }
 
   getBypassed() { return this.bypassed; }
+
+  /** Master output trim in dB (-24 .. +12) */
+  setMasterGain(db: number) {
+    this.masterGainDb = db;
+    if (this.gainNode && this.context) {
+      this.gainNode.gain.setTargetAtTime(Math.pow(10, db / 20), this.context.currentTime, 0.01);
+    }
+  }
+
+  getMasterGain() { return this.masterGainDb; }
+
 
   getInputFrequencyData(): Uint8Array {
     if (!this.inputAnalyser) return new Uint8Array(0);

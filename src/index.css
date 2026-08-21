@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&family=Chakra+Petch:wght@600;700&display=swap');
 
 @layer base {
   :root {
@@ -111,5 +111,17 @@
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: hsl(var(--muted-foreground));
+  }
+
+  .brand-wordmark {
+    font-family: 'Chakra Petch', 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 18px hsl(var(--primary) / 0.45));
   }
 }

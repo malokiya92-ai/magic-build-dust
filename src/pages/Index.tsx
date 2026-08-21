@@ -8,6 +8,7 @@ import NoiseReductionPanel from '@/components/NoiseReductionPanel';
 import TransportBar from '@/components/TransportBar';
 import ComparisonView from '@/components/ComparisonView';
 import LevelMeters from '@/components/LevelMeters';
+import MasterOutputPanel from '@/components/MasterOutputPanel';
 import { Activity, Power } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -21,6 +22,12 @@ const Index = () => {
   const [fileName, setFileName] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [bypassed, setBypassed] = useState(false);
+  const [masterGain, setMasterGain] = useState(0);
+
+  const handleMasterGainChange = useCallback((db: number) => {
+    setMasterGain(db);
+    engineRef.current?.setMasterGain(db);
+  }, []);
 
   const handleBypassToggle = useCallback(() => {
     setBypassed(prev => {
@@ -115,8 +122,8 @@ const Index = () => {
             <Activity className="w-5 h-5 text-primary" />
           </div>
           <div className="leading-tight">
-            <h1 className="font-mono text-lg font-bold tracking-tight text-foreground">
-              SP<span className="text-primary text-glow">09</span>
+            <h1 className="brand-wordmark text-xl md:text-2xl">
+              Sp&middot;09
             </h1>
             <p className="panel-label">Parametric EQ &amp; Noise Profiler</p>
           </div>
@@ -161,6 +168,8 @@ const Index = () => {
           </div>
 
           <NoiseReductionPanel settings={noiseReduction} onChange={handleNoiseReductionChange} />
+
+          <MasterOutputPanel gainDb={masterGain} onChange={handleMasterGainChange} />
         </aside>
 
         {/* Main panels */}
