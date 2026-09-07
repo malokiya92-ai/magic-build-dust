@@ -19,25 +19,28 @@ const Meter = ({ label, db, peak, color }: { label: string; db: number; peak: nu
   const peakPct = dbToPct(peak);
   return (
     <div className="flex-1 min-w-0">
-      <div className="flex items-baseline justify-between mb-1">
-        <span className="font-mono text-[10px] tracking-wider text-muted-foreground">{label}</span>
-        <span className="font-mono text-xs tabular-nums" style={{ color }}>
-          {db <= -60 ? '−∞' : `${db.toFixed(1)}`} dB
+      <div className="flex items-baseline justify-between mb-1.5">
+        <span className="panel-label">{label}</span>
+        <span className="font-mono text-sm tabular-nums" style={{ color, textShadow: `0 0 12px ${color}66` }}>
+          {db <= -60 ? '−∞' : `${db.toFixed(1)}`} <span className="text-[10px] text-muted-foreground">dB</span>
         </span>
       </div>
-      <div className="relative h-3 rounded-sm bg-muted/40 overflow-hidden border border-border/40">
-        {/* fill */}
+      <div className="relative h-4 rounded-md bg-background/70 overflow-hidden border border-border/50 shadow-[inset_0_1px_3px_hsl(240_80%_3%/0.8)]">
+        {/* tick marks */}
+        {[20, 40, 60, 80].map((t) => (
+          <div key={t} className="absolute top-0 bottom-0 w-px bg-foreground/5" style={{ left: `${t}%` }} />
+        ))}
         <div
           className="absolute inset-y-0 left-0 transition-[width] duration-75"
-          style={{ width: `${pct}%`, background: `linear-gradient(90deg, ${color} 0%, ${color} 70%, hsl(0,80%,55%) 100%)`, opacity: 0.85 }}
+          style={{
+            width: `${pct}%`,
+            background: `linear-gradient(90deg, ${color} 0%, ${color} 62%, hsl(35,90%,58%) 84%, hsl(0,85%,58%) 100%)`,
+            boxShadow: `0 0 14px -2px ${color}`,
+            opacity: 0.95,
+          }}
         />
-        {/* peak hold */}
-        <div
-          className="absolute top-0 bottom-0 w-0.5 bg-foreground"
-          style={{ left: `${peakPct}%` }}
-        />
-        {/* 0 dB tick */}
-        <div className="absolute top-0 bottom-0 w-px bg-foreground/30" style={{ left: `${dbToPct(0)}%` }} />
+        <div className="absolute top-0 bottom-0 w-0.5 bg-foreground/90" style={{ left: `${peakPct}%` }} />
+        <div className="absolute top-0 bottom-0 w-px bg-foreground/25" style={{ left: `${dbToPct(0)}%` }} />
       </div>
     </div>
   );
@@ -62,7 +65,6 @@ const LevelMeters = ({ engine, isActive }: Props) => {
         setOutDb(o);
         if (i > peakIn.current) peakIn.current = i;
         if (o > peakOut.current) peakOut.current = o;
-        // decay every ~500ms
         peakDecay.current++;
         if (peakDecay.current > 30) {
           peakDecay.current = 0;
@@ -81,19 +83,19 @@ const LevelMeters = ({ engine, isActive }: Props) => {
   const diff = outDb - inDb;
 
   return (
-    <div className="p-3 rounded-lg bg-muted/20 border border-border/40 space-y-2">
+    <div className="p-4 rounded-lg bg-background/40 border border-border/50 space-y-3">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[10px] tracking-wider text-muted-foreground">RMS LEVEL METERS</span>
-        <span className="font-mono text-[11px] tabular-nums">
+        <span className="section-title panel-label">RMS Level Meters</span>
+        <span className="font-mono text-xs tabular-nums">
           <span className="text-muted-foreground">Δ </span>
-          <span className={diff > 0.1 ? 'text-band-2' : diff < -0.1 ? 'text-band-5' : 'text-muted-foreground'}>
+          <span className={diff > 0.1 ? 'text-band-3' : diff < -0.1 ? 'text-band-1' : 'text-muted-foreground'}>
             {diff > 0 ? '+' : ''}{diff.toFixed(1)} dB
           </span>
         </span>
       </div>
-      <div className="flex gap-4">
-        <Meter label="INPUT" db={inDb} peak={peakInState} color="hsl(220, 15%, 70%)" />
-        <Meter label="OUTPUT" db={outDb} peak={peakOutState} color="hsl(243, 80%, 68%)" />
+      <div className="flex flex-col sm:flex-row gap-4">
+        <Meter label="Input · dry" db={inDb} peak={peakInState} color="hsl(220, 15%, 70%)" />
+        <Meter label="Output · wet" db={outDb} peak={peakOutState} color="hsl(243, 85%, 70%)" />
       </div>
     </div>
   );
