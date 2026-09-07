@@ -1,17 +1,39 @@
 import { NoiseReduction } from '@/lib/audioEngine';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
+import { Waves } from 'lucide-react';
 
 interface Props {
   settings: NoiseReduction;
   onChange: (settings: NoiseReduction) => void;
 }
 
+const Row = ({
+  label,
+  value,
+  children,
+}: {
+  label: string;
+  value: string;
+  children: React.ReactNode;
+}) => (
+  <div>
+    <div className="flex items-center justify-between mb-1.5">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="value-chip tabular-nums">{value}</span>
+    </div>
+    {children}
+  </div>
+);
+
 const NoiseReductionPanel = ({ settings, onChange }: Props) => {
   return (
-    <div className={`p-4 rounded-xl surface-elevated border border-border/50 transition-opacity ${!settings.enabled ? 'opacity-60' : ''}`}>
+    <div className={`p-4 panel panel-hover transition-opacity ${!settings.enabled ? 'opacity-60' : ''}`}>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-mono text-sm text-foreground tracking-wide">NOISE REDUCTION</h3>
+        <h3 className="section-title panel-label">
+          <Waves className="w-3.5 h-3.5 text-primary" />
+          Noise Reduction
+        </h3>
         <Switch
           checked={settings.enabled}
           onCheckedChange={(enabled) => onChange({ ...settings, enabled })}
@@ -19,11 +41,7 @@ const NoiseReductionPanel = ({ settings, onChange }: Props) => {
       </div>
 
       <div className="space-y-4">
-        <div>
-          <div className="flex justify-between mb-1">
-            <span className="text-xs text-muted-foreground">Gate Threshold</span>
-            <span className="font-mono text-xs text-primary">{settings.gateThreshold} dB</span>
-          </div>
+        <Row label="Gate Threshold" value={`${settings.gateThreshold} dB`}>
           <Slider
             min={-60}
             max={0}
@@ -31,13 +49,9 @@ const NoiseReductionPanel = ({ settings, onChange }: Props) => {
             value={[settings.gateThreshold]}
             onValueChange={([v]) => onChange({ ...settings, gateThreshold: v })}
           />
-        </div>
+        </Row>
 
-        <div>
-          <div className="flex justify-between mb-1">
-            <span className="text-xs text-muted-foreground">High-Pass</span>
-            <span className="font-mono text-xs text-accent">{settings.highPassFreq} Hz</span>
-          </div>
+        <Row label="High-Pass" value={`${settings.highPassFreq} Hz`}>
           <Slider
             min={20}
             max={500}
@@ -45,13 +59,9 @@ const NoiseReductionPanel = ({ settings, onChange }: Props) => {
             value={[settings.highPassFreq]}
             onValueChange={([v]) => onChange({ ...settings, highPassFreq: v })}
           />
-        </div>
+        </Row>
 
-        <div>
-          <div className="flex justify-between mb-1">
-            <span className="text-xs text-muted-foreground">Low-Pass</span>
-            <span className="font-mono text-xs text-accent">{Math.round(settings.lowPassFreq / 1000)}k Hz</span>
-          </div>
+        <Row label="Low-Pass" value={`${Math.round(settings.lowPassFreq / 1000)}k Hz`}>
           <Slider
             min={2000}
             max={20000}
@@ -59,7 +69,7 @@ const NoiseReductionPanel = ({ settings, onChange }: Props) => {
             value={[settings.lowPassFreq]}
             onValueChange={([v]) => onChange({ ...settings, lowPassFreq: v })}
           />
-        </div>
+        </Row>
       </div>
     </div>
   );
